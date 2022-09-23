@@ -23,7 +23,7 @@ model Studio {
   games Game[]
   ower Publisher @relation(fields: [ownerId], references:[id])
   ownerId String @db.VarChar(36)
-  coutrey String @db.VarChar(50)
+  country String @db.VarChar(50)
   founded DateTime
   employees Int
 }
