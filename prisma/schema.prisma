@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id String @unique @default(uuid()) @db.VarChar(36)
+  email String @unique @db.VarChar(45)
+  hash String @db.VarChar(64)
+  isAdmin Boolean
+}
+
+
+model Studio {
+  id String @unique @default(uuid()) @db.VarChar(36)
+  name String @db.VarChar(100)
+  games Game[]
+  ower Publisher @relation(fields: [ownerId], references:[id])
+  ownerId String @db.VarChar(36)
+  country String @db.VarChar(50)
+  founded DateTime
+  employees Int
+}
+
+model Publisher {
+  id String @unique @default(uuid()) @db.VarChar(36)
+  name String @db.VarChar(50)
+  sutdios Studio[]
+}
+model Game {
+  id String @unique @default(uuid()) @db.VarChar(36)
+  name String @db.VarChar(100)
+  develeopers Studio @relation(fields: [developerId], references:[id])
+  developerId String @db.VarChar(36)
+  releaseDate DateTime?
+  description String? @db.VarChar(1000)
+  platforms GameOnPlatform[]
+  image String @db.VarChar(80)
+}
+
+model Platform {
+  id String @unique @default(uuid()) @db.VarChar(36)
+  name String @db.VarChar(40)
+  games GameOnPlatform[]
+}
+
+model GameOnPlatform {
+game Game @relation(fields:[gameId], references:[id])
+gameId String @db.VarChar(36)
+platform Platform @relation(fields:[platformId], references:[id])
+platformId String @db.VarChar(36)
+
+@@id([gameId, platformId])
+}
