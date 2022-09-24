@@ -1,4 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import {ForbiddenException, Injectable} from '@nestjs/common';
+import {AuthLoginDto} from "./dto/auth-login.dto";
+import * as bcrypt from 'bcrypt';
+import {PrismaService} from "../prisma/prisma.service";
+import {PrismaClientKnownRequestError} from '@prisma/client/runtime';
+
 
 @Injectable()
-export class AuthService {}
+export class AuthService {
+    constructor(private prisma: PrismaService) {}
+
+    async signup(dto) {
+        const salt = await bcrypt.genSalt(10);
+        const encryptedPassword = await bcrypt.hash(dto.hash, salt)
+        try {
+            await this.prisma.user.create({
+                data: {
+                    email: dto.email,
+                    hash: encryptedPassword,
+                    isAdmin: true
+                },
+            });
+            return 'Udana rejestracja'
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2002') {
+                    throw new ForbiddenException('Powtarzające się dane');
+                }
+            }
+            throw error;
+        }
+    }
+
+    async login(dto: AuthLoginDto) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                email: dto.email,
+            },
+        });
+        if (!user) throw new ForbiddenException('Brak użytkownika')
+
+        const isCorrectPassword = await bcrypt.compare(dto.hash, user.hash);
+        if (!isCorrectPassword) throw new ForbiddenException('Nie prawidłowe hasło')
+
+        delete user.hash
+        return user
+    }
+}
