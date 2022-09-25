@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePublisherDto } from './dto/create-publisher.dto';
-import { UpdatePublisherDto } from './dto/update-publisher.dto';
 
 @Injectable()
 export class PublisherService {
-  create(createPublisherDto: CreatePublisherDto) {
-    return 'This action adds a new publisher';
+  constructor(private prisma: PrismaService) {
+  }
+  async createPublisher(dto: CreatePublisherDto) {
+    return  await this.prisma.publisher.create({
+      data:{
+        ...dto,
+      }
+    })
   }
 
   findAll() {
@@ -16,9 +22,6 @@ export class PublisherService {
     return `This action returns a #${id} publisher`;
   }
 
-  update(id: number, updatePublisherDto: UpdatePublisherDto) {
-    return `This action updates a #${id} publisher`;
-  }
 
   remove(id: number) {
     return `This action removes a #${id} publisher`;
