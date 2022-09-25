@@ -18,12 +18,12 @@ export class PublisherController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.publisherService.findOne(+id);
+    return this.publisherService.findOne(id);
   }
 
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.publisherService.remove(+id);
+    return this.publisherService.remove(id);
   }
 }

@@ -1,29 +1,47 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePublisherDto } from './dto/create-publisher.dto';
+import {ForbiddenException, Injectable} from '@nestjs/common';
+import {PrismaService} from 'src/prisma/prisma.service';
+import {CreatePublisherDto} from './dto/create-publisher.dto';
 
 @Injectable()
 export class PublisherService {
-  constructor(private prisma: PrismaService) {
-  }
-  async createPublisher(dto: CreatePublisherDto) {
-    return  await this.prisma.publisher.create({
-      data:{
-        ...dto,
-      }
-    })
-  }
+    constructor(private prisma: PrismaService) {
+    }
 
-  findAll() {
-    return `This action returns all publisher`;
-  }
+    async createPublisher(dto: CreatePublisherDto) {
+        return await this.prisma.publisher.create({
+            data: {
+                ...dto,
+            }
+        })
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} publisher`;
-  }
+    async findAll() {
+        return this.prisma.publisher.findMany()
+    }
+
+    async findOne(id: string) {
+        return await this.prisma.publisher.findUnique({
+            where: {
+                id
+            }
+        });
+    }
 
 
-  remove(id: number) {
-    return `This action removes a #${id} publisher`;
-  }
+    async remove(id: string) {
+        const publisher = await this.prisma.publisher.findUnique({
+            where: {
+                id,
+            }
+        })
+
+        if (!publisher) {
+            throw new ForbiddenException('Brak wydawcy');
+        }
+        await this.prisma.publisher.delete({
+            where: {
+                id,
+            }
+        })
+    }
 }
