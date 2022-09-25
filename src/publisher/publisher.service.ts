@@ -4,9 +4,7 @@ import {CreatePublisherDto} from './dto/create-publisher.dto';
 
 @Injectable()
 export class PublisherService {
-    constructor(private prisma: PrismaService) {
-    }
-
+    constructor(private prisma: PrismaService) {}
     async createPublisher(dto: CreatePublisherDto) {
         return await this.prisma.publisher.create({
             data: {
