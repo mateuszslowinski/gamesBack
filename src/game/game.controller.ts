@@ -1,12 +1,14 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseGuards} from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
+import {JwtGuard} from "../guards/jwt.guard";
 
 @Controller('game')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
+  @UseGuards(JwtGuard)
   @Post()
   createGame(
       @Body() dto: CreateGameDto,
@@ -25,11 +27,13 @@ export class GameController {
     return this.gameService.findGameById(id);
   }
 
+  @UseGuards(JwtGuard)
   @Patch(':id')
   updateGameById(@Param('id') id: string, @Body() dto: UpdateGameDto) {
     return this.gameService.updateGameById(id, dto);
   }
 
+  @UseGuards(JwtGuard)
   @Delete(':id')
   removeGameById(@Param('id') id: string) {
     return this.gameService.removeGameById(id);
