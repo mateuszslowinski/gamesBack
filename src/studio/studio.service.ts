@@ -5,8 +5,7 @@ import {CreateStudioDto} from "./dto/create-studio.dto";
 
 @Injectable()
 export class StudioService {
-    constructor(private prisma: PrismaService) {
-    }
+    constructor(private prisma: PrismaService) {}
 
     async createStudio(
         dto: CreateStudioDto,
@@ -21,15 +20,14 @@ export class StudioService {
                     connect: {id: dto.ownerId}
                 },
             },
-        })
+        });
     }
 
-
-    async findAll() {
+    async findAllStudios() {
         return await this.prisma.studio.findMany();
     }
 
-    async findOneById(id: string) {
+    async findStudioById(id: string) {
         return await this.prisma.studio.findUnique({
             where: {
                 id
@@ -37,12 +35,12 @@ export class StudioService {
         });
     }
 
-    async update(id: string, dto: UpdateStudioDto) {
+    async updateStudioById(id: string, dto: UpdateStudioDto) {
         const studio = await this.prisma.studio.findUnique({
             where: {
                 id,
-            }
-        })
+            },
+        });
 
         if (!studio) {
             throw new ForbiddenException('Brak studia')
@@ -58,11 +56,11 @@ export class StudioService {
         });
     }
 
-    async remove(id: string) {
+    async removeStudioById(id: string) {
         const studio = await this.prisma.studio.findUnique({
             where: {
                 id,
-            }
+            },
         });
 
         if (!studio) {

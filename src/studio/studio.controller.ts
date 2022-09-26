@@ -19,27 +19,27 @@ export class StudioController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.studioService.findAll();
+  findAllStudios() {
+    return this.studioService.findAllStudios();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOneById(@Param('id') id: string) {
-    return this.studioService.findOneById(id);
+  findStudioById(@Param('id') id: string) {
+    return this.studioService.findStudioById(id);
   }
 
   @UseGuards(JwtGuard)
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() dto: UpdateStudioDto) {
-    return this.studioService.update(id, dto);
+  updateStudioById(@Param('id') id: string, @Body() dto: UpdateStudioDto) {
+    return this.studioService.updateStudioById(id, dto);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  remove(@Param('id') id: string) {
-    return this.studioService.remove(id);
+  removeStudioById(@Param('id') id: string) {
+    return this.studioService.removeStudioById(id);
   }
 }
