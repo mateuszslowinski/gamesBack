@@ -5,8 +5,7 @@ import {PrismaService} from "../prisma/prisma.service";
 
 @Injectable()
 export class GameService {
-    constructor(private prisma: PrismaService) {
-    }
+    constructor(private prisma: PrismaService) {}
 
     async createGame(
         dto: CreateGameDto,
@@ -36,8 +35,26 @@ export class GameService {
         });
     }
 
-    updateGameById(id: string, dto: UpdateGameDto) {
-        return `This action updates a #${id} game`;
+   async updateGameById(id: string, dto: UpdateGameDto) {
+        const game = await this.prisma.game.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!game) {
+            throw new ForbiddenException('Brak wybranej gry')
+        }
+
+        return this.prisma.game.update({
+            where: {
+                id
+            },
+            data: {
+                ...dto,
+                releaseDate: new Date(dto.releaseDate)
+            },
+        });
     }
 
    async removeGameById(id: string) {
