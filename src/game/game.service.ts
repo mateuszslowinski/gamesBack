@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {ForbiddenException, Injectable} from '@nestjs/common';
 import {CreateGameDto} from './dto/create-game.dto';
 import {UpdateGameDto} from './dto/update-game.dto';
 import {PrismaService} from "../prisma/prisma.service";
@@ -40,7 +40,22 @@ export class GameService {
         return `This action updates a #${id} game`;
     }
 
-    removeGameById(id: string) {
-        return `This action removes a #${id} game`;
+   async removeGameById(id: string) {
+        const game = await this.prisma.game.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!game) {
+            throw new ForbiddenException('Brak wybranej gry');
+        }
+
+        await this.prisma.game.delete({
+            where: {
+                id,
+            },
+        });
+        return {message: "Gra została usunięta"}
     }
 }
