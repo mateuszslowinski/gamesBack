@@ -14,18 +14,18 @@ export class PublisherController {
   }
 
   @Get()
-  findAll() {
-    return this.publisherService.findAll();
+  findAllPublishers() {
+    return this.publisherService.findAllPublishers();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publisherService.findOne(id);
+  findOnePublisherById(@Param('id') id: string) {
+    return this.publisherService.findOnePublisherById(id);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.publisherService.remove(id);
+  removePublisherById(@Param('id') id: string) {
+    return this.publisherService.removePublisherById(id);
   }
 }

@@ -13,11 +13,11 @@ export class PublisherService {
         })
     }
 
-    async findAll() {
+    async findAllPublishers() {
         return this.prisma.publisher.findMany()
     }
 
-    async findOne(id: string) {
+    async findOnePublisherById(id: string) {
         return await this.prisma.publisher.findUnique({
             where: {
                 id
@@ -26,12 +26,12 @@ export class PublisherService {
     }
 
 
-    async remove(id: string) {
+    async removePublisherById(id: string) {
         const publisher = await this.prisma.publisher.findUnique({
             where: {
                 id,
-            }
-        })
+            },
+        });
 
         if (!publisher) {
             throw new ForbiddenException('Brak wydawcy');
@@ -39,7 +39,8 @@ export class PublisherService {
         await this.prisma.publisher.delete({
             where: {
                 id,
-            }
-        })
+            },
+        });
+        return {message: "Wydawca została usunięta"}
     }
 }
