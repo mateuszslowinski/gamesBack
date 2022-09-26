@@ -21,10 +21,10 @@ model Studio {
   id String @unique @default(uuid()) @db.VarChar(36)
   name String @db.VarChar(100)
   games Game[]
-  ower Publisher @relation(fields: [ownerId], references:[id])
+  owner Publisher @relation(fields: [ownerId], references:[id])
   ownerId String @db.VarChar(36)
   country String @db.VarChar(50)
-  founded DateTime
+  founded String @db.VarChar(4)
   employees Int
 }
 
