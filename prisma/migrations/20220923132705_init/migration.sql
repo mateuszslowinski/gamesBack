@@ -14,8 +14,8 @@ CREATE TABLE `Studio` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `ownerId` VARCHAR(191) NOT NULL,
-    `coutrey` VARCHAR(191) NOT NULL,
-    `founded` DATETIME(3) NOT NULL,
+    `country` VARCHAR(191) NOT NULL,
+    `founded` VARCHAR(4) NOT NULL,
     `employees` INTEGER NOT NULL,
 
     UNIQUE INDEX `Studio_id_key`(`id`)
