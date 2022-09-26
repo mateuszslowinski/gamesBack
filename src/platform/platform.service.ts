@@ -16,7 +16,7 @@ export class PlatformService {
     }
 
     async findAllPlatforms() {
-        return `This action returns all platform`;
+        return this.prisma.platform.findMany();
     }
 
     async findPlatformById(id: string) {
