@@ -20,7 +20,11 @@ export class PlatformService {
     }
 
     async findPlatformById(id: string) {
-        return `This action returns a #${id} platform`;
+        return this.prisma.platform.findUnique({
+            where: {
+                id,
+            }
+        })
     }
 
     async removePlatform(id: string) {
