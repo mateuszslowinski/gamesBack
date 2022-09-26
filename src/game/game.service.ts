@@ -23,8 +23,8 @@ export class GameService {
         });
     }
 
-    findAllGames() {
-        return `This action returns all game`;
+   async findAllGames() {
+        return await this.prisma.game.findMany();
     }
 
     findGameById(id: string) {
