@@ -8,8 +8,10 @@ export class StudioController {
   constructor(private readonly studioService: StudioService) {}
 
   @Post()
-  create(@Body() createStudioDto: CreateStudioDto) {
-    return this.studioService.create(createStudioDto);
+  createStudio(
+      @Body() dto: CreateStudioDto
+  ) {
+    return this.studioService.createStudio(dto);
   }
 
   @Get()
