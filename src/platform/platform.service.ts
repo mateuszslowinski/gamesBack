@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlatformDto } from './dto/create-platform.dto';
-import { UpdatePlatformDto } from './dto/update-platform.dto';
+import {PrismaService} from "../prisma/prisma.service";
 
 @Injectable()
 export class PlatformService {
-  create(createPlatformDto: CreatePlatformDto) {
+  constructor(private prisma: PrismaService) {
+  }
+
+  async createPlatform(dto: CreatePlatformDto) {
     return 'This action adds a new platform';
   }
 
-  findAll() {
+  async findAllPlatforms() {
     return `This action returns all platform`;
   }
 
-  findOne(id: number) {
+  async findPlatformById(id: string) {
     return `This action returns a #${id} platform`;
   }
 
-  update(id: number, updatePlatformDto: UpdatePlatformDto) {
-    return `This action updates a #${id} platform`;
-  }
-
-  remove(id: number) {
+ async removePlatform(id: string) {
     return `This action removes a #${id} platform`;
   }
 }

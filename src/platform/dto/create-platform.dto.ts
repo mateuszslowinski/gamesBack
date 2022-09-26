@@ -1,1 +1,8 @@
-export class CreatePlatformDto {}
+import {IsNotEmpty, IsString, Length} from "class-validator";
+
+export class CreatePlatformDto {
+    @IsString()
+    @Length(1, 40)
+    @IsNotEmpty()
+    name:string;
+}
