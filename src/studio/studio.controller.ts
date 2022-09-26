@@ -20,8 +20,8 @@ export class StudioController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studioService.findOne(+id);
+  findOneById(@Param('id') id: string) {
+    return this.studioService.findOneById(id);
   }
 
   @Patch(':id')

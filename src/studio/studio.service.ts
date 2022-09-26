@@ -29,8 +29,12 @@ export class StudioService {
         return await this.prisma.studio.findMany();
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} studio`;
+    async findOneById(id: string) {
+        return await this.prisma.studio.findUnique({
+            where:{
+                id
+            }
+        });
     }
 
     update(id: number, updateStudioDto: UpdateStudioDto) {
