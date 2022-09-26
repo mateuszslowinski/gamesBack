@@ -25,8 +25,8 @@ export class StudioService {
     }
 
 
-    findAll() {
-        return `This action returns all studio`;
+   async findAll() {
+        return await this.prisma.studio.findMany();
     }
 
     findOne(id: number) {
