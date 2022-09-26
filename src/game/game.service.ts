@@ -5,12 +5,13 @@ import {PrismaService} from "../prisma/prisma.service";
 
 @Injectable()
 export class GameService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) {
+    }
 
     async createGame(
         dto: CreateGameDto,
         file: Express.Multer.File) {
-        return  await this.prisma.game.create({
+        return await this.prisma.game.create({
             data: {
                 name: dto.name,
                 description: dto.description,
@@ -23,12 +24,16 @@ export class GameService {
         });
     }
 
-   async findAllGames() {
+    async findAllGames() {
         return await this.prisma.game.findMany();
     }
 
-    findGameById(id: string) {
-        return `This action returns a #${id} game`;
+    async findGameById(id: string) {
+        return await this.prisma.game.findUnique({
+            where: {
+                id,
+            },
+        });
     }
 
     updateGameById(id: string, dto: UpdateGameDto) {
