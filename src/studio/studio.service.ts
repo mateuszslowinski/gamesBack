@@ -37,8 +37,25 @@ export class StudioService {
         });
     }
 
-    update(id: number, updateStudioDto: UpdateStudioDto) {
-        return `This action updates a #${id} studio`;
+    async update(id: string, dto: UpdateStudioDto) {
+        const studio = await this.prisma.studio.findUnique({
+            where: {
+                id,
+            }
+        })
+
+        if (!studio) {
+            throw new ForbiddenException('Brak studia')
+        }
+
+        return this.prisma.studio.update({
+            where: {
+                id
+            },
+            data: {
+                ...dto,
+            },
+        });
     }
 
     async remove(id: string) {

@@ -28,8 +28,9 @@ export class StudioController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStudioDto: UpdateStudioDto) {
-    return this.studioService.update(+id, updateStudioDto);
+  @HttpCode(HttpStatus.OK)
+  update(@Param('id') id: string, @Body() dto: UpdateStudioDto) {
+    return this.studioService.update(id, dto);
   }
 
   @Delete(':id')
