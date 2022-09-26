@@ -6,6 +6,7 @@ import {UserModule} from "./user/user.module";
 import { PublisherModule } from './publisher/publisher.module';
 import { StudioModule } from './studio/studio.module';
 import { PlatformModule } from './platform/platform.module';
+import { GameModule } from './game/game.module';
 
 @Module({
     imports: [
@@ -17,7 +18,8 @@ import { PlatformModule } from './platform/platform.module';
         UserModule,
         PublisherModule,
         StudioModule,
-        PlatformModule
+        PlatformModule,
+        GameModule
     ],
 })
 export class AppModule {
