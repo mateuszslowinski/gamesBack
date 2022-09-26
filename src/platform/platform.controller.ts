@@ -1,11 +1,13 @@
-import {Controller, Get, Post, Body, Param, Delete, HttpCode, HttpStatus} from '@nestjs/common';
+import {Controller, Get, Post, Body, Param, Delete, HttpCode, HttpStatus, UseGuards} from '@nestjs/common';
 import { PlatformService } from './platform.service';
 import { CreatePlatformDto } from './dto/create-platform.dto';
+import {JwtGuard} from "../guards/jwt.guard";
 
 @Controller('platform')
 export class PlatformController {
   constructor(private readonly platformService: PlatformService) {}
 
+  @UseGuards(JwtGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createPlatform(@Body() dto: CreatePlatformDto) {
@@ -23,7 +25,6 @@ export class PlatformController {
   findPlatformById(@Param('id') id: string) {
     return this.platformService.findPlatformById(id);
   }
-
 
 
   @Delete(':id')
