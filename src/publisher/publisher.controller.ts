@@ -7,26 +7,25 @@ import {JwtGuard} from "../guards/jwt.guard";
 export class PublisherController {
   constructor(private readonly publisherService: PublisherService) {}
 
-  @Post()
   @UseGuards(JwtGuard)
+  @Post()
   createPublisher(@Body() dto: CreatePublisherDto) {
     return this.publisherService.createPublisher(dto);
   }
 
   @Get()
-  findAll() {
-    return this.publisherService.findAll();
+  findAllPublishers() {
+    return this.publisherService.findAllPublishers();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publisherService.findOne(id);
+  findOnePublisherById(@Param('id') id: string) {
+    return this.publisherService.findOnePublisherById(id);
   }
 
-
-  @Delete(':id')
   @UseGuards(JwtGuard)
-  remove(@Param('id') id: string) {
-    return this.publisherService.remove(id);
+  @Delete(':id')
+  removePublisherById(@Param('id') id: string) {
+    return this.publisherService.removePublisherById(id);
   }
 }
