@@ -26,7 +26,7 @@ export class PlatformController {
     return this.platformService.findPlatformById(id);
   }
 
-
+  @UseGuards(JwtGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   removePlatform(@Param('id') id: string) {

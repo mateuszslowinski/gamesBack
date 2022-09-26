@@ -8,8 +8,8 @@ import {JwtGuard} from "../guards/jwt.guard";
 export class StudioController {
   constructor(private readonly studioService: StudioService) {}
 
-  @Post()
   @UseGuards(JwtGuard)
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   createStudio(
       @Body() dto: CreateStudioDto
@@ -29,15 +29,15 @@ export class StudioController {
     return this.studioService.findOneById(id);
   }
 
-  @Patch(':id')
   @UseGuards(JwtGuard)
+  @Patch(':id')
   @HttpCode(HttpStatus.OK)
   update(@Param('id') id: string, @Body() dto: UpdateStudioDto) {
     return this.studioService.update(id, dto);
   }
 
-  @Delete(':id')
   @UseGuards(JwtGuard)
+  @Delete(':id')
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string) {
     return this.studioService.remove(id);
