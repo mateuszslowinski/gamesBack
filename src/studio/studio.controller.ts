@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus} from '@nestjs/common';
 import { StudioService } from './studio.service';
 import { CreateStudioDto } from './dto/create-studio.dto';
 import { UpdateStudioDto } from './dto/update-studio.dto';
@@ -8,6 +8,7 @@ export class StudioController {
   constructor(private readonly studioService: StudioService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   createStudio(
       @Body() dto: CreateStudioDto
   ) {
@@ -15,11 +16,13 @@ export class StudioController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.studioService.findAll();
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   findOneById(@Param('id') id: string) {
     return this.studioService.findOneById(id);
   }
@@ -30,7 +33,8 @@ export class StudioController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string) {
-    return this.studioService.remove(+id);
+    return this.studioService.remove(id);
   }
 }

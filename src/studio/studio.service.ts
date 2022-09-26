@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {ForbiddenException, Injectable} from '@nestjs/common';
 import {UpdateStudioDto} from './dto/update-studio.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import {CreateStudioDto} from "./dto/create-studio.dto";
@@ -11,7 +11,7 @@ export class StudioService {
     async createStudio(
         dto: CreateStudioDto,
     ) {
-       return await this.prisma.studio.create({
+        return await this.prisma.studio.create({
             data: {
                 name: dto.name,
                 country: dto.country,
@@ -25,13 +25,13 @@ export class StudioService {
     }
 
 
-   async findAll() {
+    async findAll() {
         return await this.prisma.studio.findMany();
     }
 
     async findOneById(id: string) {
         return await this.prisma.studio.findUnique({
-            where:{
+            where: {
                 id
             }
         });
@@ -41,7 +41,22 @@ export class StudioService {
         return `This action updates a #${id} studio`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} studio`;
+    async remove(id: string) {
+        const studio = await this.prisma.studio.findUnique({
+            where: {
+                id,
+            }
+        });
+
+        if (!studio) {
+            throw new ForbiddenException('Brak studia');
+        }
+
+        await this.prisma.studio.delete({
+            where: {
+                id,
+            },
+        });
+        return {message: "Studio zostało usunięte"}
     }
 }
