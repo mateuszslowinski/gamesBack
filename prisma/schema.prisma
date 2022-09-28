@@ -26,11 +26,14 @@ model Studio {
   country String @db.VarChar(50)
   founded String @db.VarChar(4)
   employees Int
+  image String @db.VarChar(80)
+  description String @db.VarChar(1500)
 }
 
 model Publisher {
   id String @unique @default(uuid()) @db.VarChar(36)
   name String @db.VarChar(50)
+  description String @db.VarChar(1500)
   sutdios Studio[]
 }
 model Game {
@@ -47,6 +50,7 @@ model Game {
 model Platform {
   id String @unique @default(uuid()) @db.VarChar(36)
   name String @db.VarChar(40)
+  description String @db.VarChar(1500)
   games GameOnPlatform[]
 }
 
