@@ -1,7 +1,7 @@
 import {ForbiddenException, Injectable} from '@nestjs/common';
 import {PrismaService} from 'src/prisma/prisma.service';
 import {CreatePublisherDto} from './dto/create-publisher.dto';
-import {PublisherType} from "../types";
+import {PublisherType, StudioType} from "../types";
 
 @Injectable()
 export class PublisherService {
@@ -45,4 +45,11 @@ export class PublisherService {
         return {message: "Wydawca została usunięta"}
     }
 
+    async getStudioByPublisher(id: string): Promise<StudioType[]> {
+        return await this.prisma.studio.findMany({
+            where: {
+                ownerId: id
+            }
+        })
+    }
 }
