@@ -5,4 +5,9 @@ export class CreatePublisherDto {
     @Length(1, 50)
     @IsNotEmpty()
     name:string;
+
+    @IsString()
+    @Length(1, 1500)
+    @IsNotEmpty()
+    description:string;
 }

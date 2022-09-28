@@ -16,6 +16,8 @@ export class StudioService {
                 country: dto.country,
                 founded: dto.founded,
                 employees: dto.employees,
+                image:dto.image,
+                description:dto.description,
                 owner: {
                     connect: {id: dto.ownerId}
                 },

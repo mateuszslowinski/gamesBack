@@ -24,4 +24,14 @@ export class CreateStudioDto {
     @IsNumber()
     @IsOptional()
     employees?: number
+
+    @IsString()
+    @Length(1, 1500)
+    @IsNotEmpty()
+    description:string;
+
+    @IsString()
+    @Length(0, 80)
+    @IsNotEmpty()
+    image: string
 }

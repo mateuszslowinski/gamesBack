@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateStudioDto } from './create-studio.dto';
-import { IsNumber, IsOptional, IsString, Length} from "class-validator";
+import {IsNumber, IsOptional, IsString, Length} from "class-validator";
 
 export class UpdateStudioDto extends PartialType(CreateStudioDto) {
     @IsString()
@@ -26,5 +26,15 @@ export class UpdateStudioDto extends PartialType(CreateStudioDto) {
     @IsNumber()
     @IsOptional()
     employees?: number
+
+    @IsString()
+    @Length(1, 1500)
+    @IsOptional()
+    description:string;
+
+    @IsString()
+    @Length(0, 80)
+    @IsOptional()
+    image: string
 
 }

@@ -12,14 +12,17 @@
   - You are about to alter the column `name` on the `platform` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(40)`.
   - You are about to alter the column `id` on the `publisher` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(36)`.
   - You are about to alter the column `name` on the `publisher` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(50)`.
-  - You are about to drop the column `coutrey` on the `studio` table. All the data in the column will be lost.
   - You are about to alter the column `id` on the `studio` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(36)`.
   - You are about to alter the column `name` on the `studio` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(100)`.
   - You are about to alter the column `ownerId` on the `studio` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(36)`.
+  - You are about to alter the column `country` on the `studio` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(50)`.
   - You are about to alter the column `id` on the `user` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(36)`.
   - You are about to alter the column `email` on the `user` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(45)`.
   - You are about to alter the column `hash` on the `user` table. The data in that column could be lost. The data in that column will be cast from `VarChar(191)` to `VarChar(64)`.
-  - Added the required column `country` to the `Studio` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `description` to the `Platform` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `description` to the `Publisher` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `description` to the `Studio` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `image` to the `Studio` table without a default value. This is not possible if the table is not empty.
 
 */
 -- DropForeignKey
@@ -48,20 +51,22 @@ ALTER TABLE `gameonplatform` DROP PRIMARY KEY,
     ADD PRIMARY KEY (`gameId`, `platformId`);
 
 -- AlterTable
-ALTER TABLE `platform` MODIFY `id` VARCHAR(36) NOT NULL,
+ALTER TABLE `platform` ADD COLUMN `description` VARCHAR(1500) NOT NULL,
+    MODIFY `id` VARCHAR(36) NOT NULL,
     MODIFY `name` VARCHAR(40) NOT NULL;
 
 -- AlterTable
-ALTER TABLE `publisher` MODIFY `id` VARCHAR(36) NOT NULL,
+ALTER TABLE `publisher` ADD COLUMN `description` VARCHAR(1500) NOT NULL,
+    MODIFY `id` VARCHAR(36) NOT NULL,
     MODIFY `name` VARCHAR(50) NOT NULL;
 
 -- AlterTable
-ALTER TABLE `studio` DROP COLUMN `coutrey`,
-    ADD COLUMN `country` VARCHAR(50) NOT NULL,
+ALTER TABLE `studio` ADD COLUMN `description` VARCHAR(1500) NOT NULL,
+    ADD COLUMN `image` VARCHAR(80) NOT NULL,
     MODIFY `id` VARCHAR(36) NOT NULL,
     MODIFY `name` VARCHAR(100) NOT NULL,
     MODIFY `ownerId` VARCHAR(36) NOT NULL,
-    MODIFY `founded` VARCHAR(4) NOT NULL;
+    MODIFY `country` VARCHAR(50) NOT NULL;
 
 -- AlterTable
 ALTER TABLE `user` MODIFY `id` VARCHAR(36) NOT NULL,
