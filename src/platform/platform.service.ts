@@ -1,12 +1,13 @@
 import {ForbiddenException, Injectable} from '@nestjs/common';
 import {CreatePlatformDto} from './dto/create-platform.dto';
 import {PrismaService} from "../prisma/prisma.service";
+import {PlatformType} from "../types";
 
 @Injectable()
 export class PlatformService {
     constructor(private prisma: PrismaService) {}
 
-    async createPlatform(dto: CreatePlatformDto) {
+    async createPlatform(dto: CreatePlatformDto): Promise<PlatformType> {
         return await this.prisma.platform.create({
             data: {
                 ...dto,
@@ -14,11 +15,11 @@ export class PlatformService {
         });
     }
 
-    async findAllPlatforms() {
+    async findAllPlatforms(): Promise<PlatformType[]> {
         return this.prisma.platform.findMany();
     }
 
-    async findPlatformById(id: string) {
+    async findPlatformById(id: string): Promise<PlatformType> {
         return this.prisma.platform.findUnique({
             where: {
                 id,
@@ -26,7 +27,7 @@ export class PlatformService {
         });
     }
 
-    async removePlatform(id: string) {
+    async removePlatform(id: string): Promise<{ message: string }> {
         const platform = this.prisma.platform.findUnique({
             where: {
                 id,

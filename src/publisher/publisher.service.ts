@@ -1,11 +1,13 @@
 import {ForbiddenException, Injectable} from '@nestjs/common';
 import {PrismaService} from 'src/prisma/prisma.service';
 import {CreatePublisherDto} from './dto/create-publisher.dto';
+import {PublisherType, StudioType} from "../types";
 
 @Injectable()
 export class PublisherService {
     constructor(private prisma: PrismaService) {}
-    async createPublisher(dto: CreatePublisherDto) {
+
+    async createPublisher(dto: CreatePublisherDto): Promise<PublisherType> {
         return await this.prisma.publisher.create({
             data: {
                 ...dto,
@@ -13,11 +15,11 @@ export class PublisherService {
         })
     }
 
-    async findAllPublishers() {
+    async findAllPublishers(): Promise<PublisherType[]> {
         return this.prisma.publisher.findMany()
     }
 
-    async findOnePublisherById(id: string) {
+    async findOnePublisherById(id: string): Promise<PublisherType> {
         return await this.prisma.publisher.findUnique({
             where: {
                 id
@@ -25,8 +27,7 @@ export class PublisherService {
         });
     }
 
-
-    async removePublisherById(id: string) {
+    async removePublisherById(id: string): Promise<{ message: string }> {
         const publisher = await this.prisma.publisher.findUnique({
             where: {
                 id,
@@ -42,5 +43,13 @@ export class PublisherService {
             },
         });
         return {message: "Wydawca została usunięta"}
+    }
+
+    async getStudioByPublisher(id: string): Promise<StudioType[]> {
+        return await this.prisma.studio.findMany({
+            where: {
+                ownerId: id
+            }
+        })
     }
 }
