@@ -5,4 +5,9 @@ export class CreatePlatformDto {
     @Length(1, 40)
     @IsNotEmpty()
     name:string;
+
+    @IsString()
+    @Length(1, 1500)
+    @IsNotEmpty()
+    description:string;
 }
