@@ -5,5 +5,7 @@ export type StudioType ={
     country:string
     founded:string
     employees:number
+    image:string
+    description:string
 }
 
