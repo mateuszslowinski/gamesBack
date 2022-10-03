@@ -1,11 +1,11 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import {BadRequestException, Injectable} from '@nestjs/common';
-import {PrismaService} from "../prisma/prisma.service";
-import {storageDir} from "../utils/storage";
+import * as fs from 'fs';
 import {UpdateStudioDto} from './dto/update-studio.dto';
+import {PrismaService} from "../prisma/prisma.service";
 import {CreateStudioDto} from "./dto/create-studio.dto";
 import {MulterDiskUploadedFiles} from 'src/types/files/files';
+import {storageDir} from "../utils/storage";
+import * as path from 'path';
 
 @Injectable()
 export class StudioService {
@@ -60,24 +60,37 @@ export class StudioService {
 
     async updateStudioById(id: string,
                            dto: UpdateStudioDto,
-                           ) {
+                           files: MulterDiskUploadedFiles, ) {
         const studio = await this.prisma.studio.findUnique({
             where: {
                 id,
             },
         });
-
+        const photo = files?.image?.[0] ?? null;
+        if (!photo) throw new BadRequestException();
         if (!studio) throw new BadRequestException();
 
-          return this.prisma.studio.update({
-              where: {
-                  id
-              },
-              data: {
-                  ...dto,
-              },
-          });
-
+        try {
+            return this.prisma.studio.update({
+                where: {
+                    id
+                },
+                data: {
+                    ...dto,
+                    image:photo.filename
+                },
+            });
+        }catch (e) {
+            try {
+                if (photo) {
+                    fs.unlinkSync(
+                        path.join(storageDir(), 'studios-photos', photo.filename)
+                    );
+                }
+            } catch (e2) {
+            }
+            throw e;
+        }
     }
 
     async removeStudioById(id: string) {
@@ -121,4 +134,5 @@ export class StudioService {
             });
         }
     }
+
 }
