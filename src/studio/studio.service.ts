@@ -1,11 +1,11 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
 import * as fs from 'fs';
-import {UpdateStudioDto} from './dto/update-studio.dto';
+import * as path from 'path';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import {PrismaService} from "../prisma/prisma.service";
+import {storageDir} from "../utils/storage";
+import {UpdateStudioDto} from './dto/update-studio.dto';
 import {CreateStudioDto} from "./dto/create-studio.dto";
 import {MulterDiskUploadedFiles} from 'src/types/files/files';
-import {storageDir} from "../utils/storage";
-import * as path from 'path';
 
 @Injectable()
 export class StudioService {
@@ -97,4 +97,28 @@ export class StudioService {
         return {message: "Studio zostało usunięte"}
     }
 
+    async getPhoto(id: string, res: any) {
+        try {
+            const studio = await this.prisma.studio.findUnique({
+                where: {
+                    id
+                }
+            });
+
+            if (!studio) throw new BadRequestException();
+            if (!studio.image) throw new BadRequestException();
+
+            res.sendFile(
+                studio.image,
+                {
+                    root: path.join(storageDir(), 'studios-photos'),
+                },
+            );
+
+        } catch (e) {
+            res.json({
+                error: e.message,
+            });
+        }
+    }
 }
