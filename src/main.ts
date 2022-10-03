@@ -4,13 +4,19 @@ import {ValidationPipe} from "@nestjs/common";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(new ValidationPipe());
     app.setGlobalPrefix('api');
+    app.enableCors({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    });
 
     app.useGlobalPipes(
         new ValidationPipe({
+            disableErrorMessages: true,
+
             whitelist: true,
-            forbidNonWhitelisted: false,
+            forbidNonWhitelisted: true,
+
             transform: true,
             transformOptions: {
                 enableImplicitConversion: true,
@@ -18,10 +24,6 @@ async function bootstrap() {
         }),
     );
 
-    app.enableCors({
-        origin: 'http://localhost:3000',
-        credentials: true,
-    });
 
     await app.listen(3001);
 }
