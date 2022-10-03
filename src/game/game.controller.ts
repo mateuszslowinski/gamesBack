@@ -6,15 +6,18 @@ import {
   Patch,
   Param,
   Delete,
-  UploadedFile,
   UseGuards,
   HttpCode,
-  HttpStatus
+  HttpStatus, UseInterceptors, UploadedFiles
 } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import {JwtGuard} from "../guards/jwt.guard";
+import {FileFieldsInterceptor} from "@nestjs/platform-express";
+import {multerStorage, storageDir} from "../utils/storage";
+import * as path from "path";
+import {MulterDiskUploadedFiles} from "../types/files/files";
 
 @Controller('game')
 export class GameController {
@@ -22,11 +25,14 @@ export class GameController {
 
   @UseGuards(JwtGuard)
   @Post()
-  @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(
+      FileFieldsInterceptor([{name: 'image', maxCount: 1},],
+          {storage: multerStorage(path.join(storageDir(), 'games-photos'))},
+      )
+  )
   createGame(
       @Body() dto: CreateGameDto,
-      @UploadedFile() file: Express.Multer.File,
-  ) {
+      @UploadedFiles() file: MulterDiskUploadedFiles) {
     return this.gameService.createGame(dto,file);
   }
 

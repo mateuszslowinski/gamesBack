@@ -1,27 +1,48 @@
-import {ForbiddenException, Injectable} from '@nestjs/common';
+import {BadRequestException, ForbiddenException, Injectable} from '@nestjs/common';
 import {CreateGameDto} from './dto/create-game.dto';
 import {UpdateGameDto} from './dto/update-game.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import {GameType} from "../types";
+import {MulterDiskUploadedFiles} from "../types/files/files";
+import fs from "fs";
+import path from "path";
+import {storageDir} from "../utils/storage";
 
 @Injectable()
 export class GameService {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) {
+    }
 
     async createGame(
         dto: CreateGameDto,
-        file: Express.Multer.File): Promise<GameType> {
-        return await this.prisma.game.create({
-            data: {
-                name: dto.name,
-                description: dto.description,
-                image: dto.image,
-                releaseDate: new Date(dto.releaseDate),
-                develeopers: {
-                    connect: {id: dto.developerId}
+        files: MulterDiskUploadedFiles,): Promise<GameType> {
+
+        const photo = files?.image?.[0] ?? null;
+        if (!photo) throw new BadRequestException();
+
+        try {
+            return await this.prisma.game.create({
+                data: {
+                    name: dto.name,
+                    description: dto.description,
+                    image: photo.filename,
+                    releaseDate: new Date(dto.releaseDate),
+                    develeopers: {
+                        connect: {id: dto.developerId}
+                    },
                 },
-            },
-        });
+            });
+        } catch (e) {
+            try {
+                if (photo) {
+                    fs.unlinkSync(
+                        path.join(storageDir(), 'games-photos', photo.filename)
+                    );
+                }
+            } catch (e2) {
+            }
+            throw e;
+        }
     }
 
     async findAllGames(): Promise<GameType[]> {
