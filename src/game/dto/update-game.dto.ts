@@ -22,8 +22,5 @@ export class UpdateGameDto extends PartialType(CreateGameDto) {
     @IsOptional()
     description: string
 
-    @IsString()
-    @Length(0, 80)
-    @IsOptional()
     image: string
 }
