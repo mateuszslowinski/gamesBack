@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
   HttpCode,
-  HttpStatus, UseInterceptors, UploadedFiles
+  HttpStatus, UseInterceptors, UploadedFiles, Res
 } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -61,4 +61,15 @@ export class GameController {
   removeGameById(@Param('id') id: string) {
     return this.gameService.removeGameById(id);
   }
+
+  @Get('/photo/:id')
+  @HttpCode(HttpStatus.OK)
+  async getGamePhoto(
+      @Param('id') id: string,
+      @Res() res: any,
+  ): Promise<any> {
+    return this.gameService.getGamePhoto(id, res);
+  }
+
+
 }

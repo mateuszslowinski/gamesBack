@@ -5,7 +5,7 @@ import {PrismaService} from "../prisma/prisma.service";
 import {GameType} from "../types";
 import {MulterDiskUploadedFiles} from "../types/files/files";
 import fs from "fs";
-import path from "path";
+import * as path from "path";
 import {storageDir} from "../utils/storage";
 
 @Injectable()
@@ -97,4 +97,32 @@ export class GameService {
         });
         return {message: "Gra została usunięta"}
     }
+
+
+
+    async getGamePhoto(id: string, res: any) {
+        try {
+            const game = await this.prisma.game.findUnique({
+                where: {
+                    id
+                }
+            });
+            if (!game) throw new BadRequestException();
+            if (!game.image) throw new BadRequestException();
+
+            res.sendFile(
+                game.image,
+                {
+                    root: path.join(storageDir(), 'games-photos'),
+                },
+            );
+
+        } catch (e) {
+            res.json({
+                error: e.message,
+            });
+        }
+    }
+
+
 }
