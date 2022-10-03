@@ -6,15 +6,18 @@ import {
   Patch,
   Param,
   Delete,
-  UploadedFile,
   UseGuards,
   HttpCode,
-  HttpStatus
+  HttpStatus, UseInterceptors, UploadedFiles, Res
 } from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import {JwtGuard} from "../guards/jwt.guard";
+import {FileFieldsInterceptor} from "@nestjs/platform-express";
+import {multerStorage, storageDir} from "../utils/storage";
+import * as path from "path";
+import {MulterDiskUploadedFiles} from "../types/files/files";
 
 @Controller('game')
 export class GameController {
@@ -22,11 +25,14 @@ export class GameController {
 
   @UseGuards(JwtGuard)
   @Post()
-  @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(
+      FileFieldsInterceptor([{name: 'image', maxCount: 1},],
+          {storage: multerStorage(path.join(storageDir(), 'games-photos'))},
+      )
+  )
   createGame(
       @Body() dto: CreateGameDto,
-      @UploadedFile() file: Express.Multer.File,
-  ) {
+      @UploadedFiles() file: MulterDiskUploadedFiles) {
     return this.gameService.createGame(dto,file);
   }
 
@@ -44,9 +50,17 @@ export class GameController {
 
   @UseGuards(JwtGuard)
   @Patch(':id')
+  @UseInterceptors(
+      FileFieldsInterceptor([{name: 'image', maxCount: 1},],
+          {storage: multerStorage(path.join(storageDir(), 'games-photos'))},
+      )
+  )
   @HttpCode(HttpStatus.OK)
-  updateGameById(@Param('id') id: string, @Body() dto: UpdateGameDto) {
-    return this.gameService.updateGameById(id, dto);
+  updateGameById(
+      @Param('id') id: string,
+      @Body() dto: UpdateGameDto,
+      @UploadedFiles() files: MulterDiskUploadedFiles) {
+    return this.gameService.updateGameById(id, dto,files);
   }
 
   @UseGuards(JwtGuard)
@@ -55,4 +69,15 @@ export class GameController {
   removeGameById(@Param('id') id: string) {
     return this.gameService.removeGameById(id);
   }
+
+  @Get('/photo/:id')
+  @HttpCode(HttpStatus.OK)
+  async getGamePhoto(
+      @Param('id') id: string,
+      @Res() res: any,
+  ): Promise<any> {
+    return this.gameService.getGamePhoto(id, res);
+  }
+
+
 }

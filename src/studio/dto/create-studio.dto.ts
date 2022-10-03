@@ -30,8 +30,5 @@ export class CreateStudioDto {
     @IsNotEmpty()
     description:string;
 
-    @IsString()
-    @Length(0, 80)
-    @IsNotEmpty()
     image: string
 }

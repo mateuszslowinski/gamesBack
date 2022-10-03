@@ -20,8 +20,5 @@ export class CreateGameDto {
     @IsOptional()
     description: string
 
-    @IsString()
-    @Length(0, 80)
-    @IsNotEmpty()
     image: string
 }

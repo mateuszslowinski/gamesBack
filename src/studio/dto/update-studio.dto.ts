@@ -32,9 +32,6 @@ export class UpdateStudioDto extends PartialType(CreateStudioDto) {
     @IsOptional()
     description:string;
 
-    @IsString()
-    @Length(0, 80)
-    @IsOptional()
     image: string
 
 }
