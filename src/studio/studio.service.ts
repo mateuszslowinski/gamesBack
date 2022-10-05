@@ -1,11 +1,11 @@
 import {BadRequestException, Injectable} from '@nestjs/common';
 import * as fs from 'fs';
-import {UpdateStudioDto} from './dto/update-studio.dto';
+import * as path from 'path';
 import {PrismaService} from "../prisma/prisma.service";
-import {CreateStudioDto} from "./dto/create-studio.dto";
 import {MulterDiskUploadedFiles} from 'src/types/files/files';
 import {storageDir} from "../utils/storage";
-import * as path from 'path';
+import {CreateStudioDto} from "./dto/create-studio.dto";
+import {UpdateStudioDto} from './dto/update-studio.dto';
 
 @Injectable()
 export class StudioService {
@@ -60,7 +60,7 @@ export class StudioService {
 
     async updateStudioById(id: string,
                            dto: UpdateStudioDto,
-                           files: MulterDiskUploadedFiles, ) {
+                           files: MulterDiskUploadedFiles,) {
         const studio = await this.prisma.studio.findUnique({
             where: {
                 id,
@@ -77,10 +77,10 @@ export class StudioService {
                 },
                 data: {
                     ...dto,
-                    image:photo.filename
+                    image: photo.filename
                 },
             });
-        }catch (e) {
+        } catch (e) {
             try {
                 if (photo) {
                     fs.unlinkSync(
@@ -101,13 +101,20 @@ export class StudioService {
         });
 
         if (!studio) throw new BadRequestException();
+        try {
+            fs.unlinkSync(
+                path.join(storageDir(), 'studios-photos', studio.image)
+            );
+            await this.prisma.studio.delete({
+                where: {
+                    id,
+                },
+            });
+            return {message: "Studio zostało usunięte"}
+        } catch (e) {
+            throw e
+        }
 
-        await this.prisma.studio.delete({
-            where: {
-                id,
-            },
-        });
-        return {message: "Studio zostało usunięte"}
     }
 
     async getPhoto(id: string, res: any) {
@@ -118,8 +125,7 @@ export class StudioService {
                 }
             });
 
-            if (!studio) throw new BadRequestException();
-            if (!studio.image) throw new BadRequestException();
+            if (!studio || !studio.image) throw new BadRequestException();
 
             res.sendFile(
                 studio.image,
