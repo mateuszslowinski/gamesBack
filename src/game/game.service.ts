@@ -1,12 +1,12 @@
 import {BadRequestException, ForbiddenException, Injectable} from '@nestjs/common';
+import * as path from "path";
+import * as fs from "fs";
+import {PrismaService} from "../prisma/prisma.service";
+import {MulterDiskUploadedFiles} from "../types/files/files";
+import {storageDir} from "../utils/storage";
 import {CreateGameDto} from './dto/create-game.dto';
 import {UpdateGameDto} from './dto/update-game.dto';
-import {PrismaService} from "../prisma/prisma.service";
 import {GameType} from "../types";
-import {MulterDiskUploadedFiles} from "../types/files/files";
-import fs from "fs";
-import * as path from "path";
-import {storageDir} from "../utils/storage";
 
 @Injectable()
 export class GameService {
@@ -106,15 +106,21 @@ export class GameService {
         if (!game) {
             throw new ForbiddenException('Brak wybranej gry');
         }
-
-        await this.prisma.game.delete({
-            where: {
-                id,
-            },
-        });
-        return {message: "Gra została usunięta"}
+        console.log(path.join(storageDir(), 'games-photos', game.image))
+        try {
+            fs.unlinkSync(
+                path.join(storageDir(), 'games-photos', game.image)
+            );
+            await this.prisma.game.delete({
+                where: {
+                    id,
+                },
+            });
+            return {message: "Gra została usunięta"}
+        } catch (e) {
+            throw  e
+        }
     }
-
 
     async getGamePhoto(id: string, res: any) {
         try {
@@ -123,16 +129,13 @@ export class GameService {
                     id
                 }
             });
-            if (!game) throw new BadRequestException();
-            if (!game.image) throw new BadRequestException();
-
+            if (!game || !game.image) throw new BadRequestException();
             res.sendFile(
                 game.image,
                 {
                     root: path.join(storageDir(), 'games-photos'),
                 },
             );
-
         } catch (e) {
             res.json({
                 error: e.message,
