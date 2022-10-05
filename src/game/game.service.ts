@@ -106,13 +106,19 @@ export class GameService {
         if (!game) {
             throw new ForbiddenException('Brak wybranej gry');
         }
-
-        await this.prisma.game.delete({
-            where: {
-                id,
-            },
-        });
-        return {message: "Gra została usunięta"}
+        try {
+            fs.unlinkSync(
+                path.join(storageDir(), 'games-photos', game.image)
+            );
+            await this.prisma.game.delete({
+                where: {
+                    id,
+                },
+            });
+            return {message: "Gra została usunięta"}
+        } catch (e) {
+            throw  e
+        }
     }
 
 
@@ -123,8 +129,7 @@ export class GameService {
                     id
                 }
             });
-            if (!game) throw new BadRequestException();
-            if (!game.image) throw new BadRequestException();
+            if (!game || !game.image) throw new BadRequestException();
 
             res.sendFile(
                 game.image,
