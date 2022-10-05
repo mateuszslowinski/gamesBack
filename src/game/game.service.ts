@@ -1,12 +1,12 @@
 import {BadRequestException, ForbiddenException, Injectable} from '@nestjs/common';
+import * as path from "path";
+import * as fs from "fs";
+import {PrismaService} from "../prisma/prisma.service";
+import {MulterDiskUploadedFiles} from "../types/files/files";
+import {storageDir} from "../utils/storage";
 import {CreateGameDto} from './dto/create-game.dto';
 import {UpdateGameDto} from './dto/update-game.dto';
-import {PrismaService} from "../prisma/prisma.service";
 import {GameType} from "../types";
-import {MulterDiskUploadedFiles} from "../types/files/files";
-import fs from "fs";
-import * as path from "path";
-import {storageDir} from "../utils/storage";
 
 @Injectable()
 export class GameService {
@@ -106,6 +106,7 @@ export class GameService {
         if (!game) {
             throw new ForbiddenException('Brak wybranej gry');
         }
+        console.log(path.join(storageDir(), 'games-photos', game.image))
         try {
             fs.unlinkSync(
                 path.join(storageDir(), 'games-photos', game.image)
@@ -121,7 +122,6 @@ export class GameService {
         }
     }
 
-
     async getGamePhoto(id: string, res: any) {
         try {
             const game = await this.prisma.game.findUnique({
@@ -130,14 +130,12 @@ export class GameService {
                 }
             });
             if (!game || !game.image) throw new BadRequestException();
-
             res.sendFile(
                 game.image,
                 {
                     root: path.join(storageDir(), 'games-photos'),
                 },
             );
-
         } catch (e) {
             res.json({
                 error: e.message,
