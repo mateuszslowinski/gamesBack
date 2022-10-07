@@ -143,5 +143,11 @@ export class GameService {
         }
     }
 
-
+    async getGamesByStudio(id: string): Promise<GameType[]> {
+        return await this.prisma.game.findMany({
+            where: {
+                developerId: id,
+            },
+        });
+    }
 }

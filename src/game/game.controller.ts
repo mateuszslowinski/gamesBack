@@ -79,5 +79,8 @@ export class GameController {
     return this.gameService.getGamePhoto(id, res);
   }
 
-
+  @Get('/:id/games')
+  getGamesByStudio(@Param('id') id: string) {
+    return this.gameService.getGamesByStudio(id);
+  }
 }
