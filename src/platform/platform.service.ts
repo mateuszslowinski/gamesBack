@@ -2,6 +2,7 @@ import {ForbiddenException, Injectable} from '@nestjs/common';
 import {CreatePlatformDto} from './dto/create-platform.dto';
 import {PrismaService} from "../prisma/prisma.service";
 import {PlatformType} from "../types";
+import {UpdatePlatformDto} from "./dto/update-platform.dto";
 
 @Injectable()
 export class PlatformService {
@@ -25,6 +26,18 @@ export class PlatformService {
                 id,
             },
         });
+    }
+    async updatePlatformById(id: string, dto: UpdatePlatformDto): Promise<PlatformType> {
+        try {
+            return this.prisma.platform.update({
+                where: {
+                    id
+                }, data: {
+                    ...dto,
+                },
+            })
+        } catch (e) {
+            throw e;        }
     }
 
     async removePlatform(id: string): Promise<{ message: string }> {
