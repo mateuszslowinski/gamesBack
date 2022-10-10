@@ -1,7 +1,19 @@
-import {Controller, Get, Post, Body, Param, Delete, UseGuards} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  HttpCode,
+  HttpStatus, Patch,
+} from '@nestjs/common';
 import { PublisherService } from './publisher.service';
 import { CreatePublisherDto } from './dto/create-publisher.dto';
 import {JwtGuard} from "../guards/jwt.guard";
+import {PublisherType} from "../types";
+import {UpdatePublisherDto} from "./dto/update-publisher.dto";
 
 @Controller('publisher')
 export class PublisherController {
@@ -21,6 +33,16 @@ export class PublisherController {
   @Get(':id')
   findOnePublisherById(@Param('id') id: string) {
     return this.publisherService.findOnePublisherById(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  updatePublisherById(
+      @Param('id') id: string,
+      @Body() dto: UpdatePublisherDto,
+  ): Promise<PublisherType> {
+    return this.publisherService.updatePublisherById(id, dto);
   }
 
   @UseGuards(JwtGuard)
