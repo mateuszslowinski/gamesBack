@@ -72,7 +72,11 @@ export class GameService {
 
         if (!game) throw new BadRequestException();
         try {
-
+            if (photo) {
+                fs.unlinkSync(
+                    path.join(storageDir(), 'games-photos', game.image)
+                );
+            }
             return this.prisma.game.update({
                 where: {
                     id
@@ -102,11 +106,9 @@ export class GameService {
                 id,
             },
         });
-
         if (!game) {
             throw new ForbiddenException('Brak wybranej gry');
         }
-        console.log(path.join(storageDir(), 'games-photos', game.image))
         try {
             fs.unlinkSync(
                 path.join(storageDir(), 'games-photos', game.image)
