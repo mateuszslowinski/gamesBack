@@ -60,7 +60,7 @@ export class StudioService {
 
     async updateStudioById(id: string,
                            dto: UpdateStudioDto,
-                           files: MulterDiskUploadedFiles,) {
+                           files: MulterDiskUploadedFiles) {
         const studio = await this.prisma.studio.findUnique({
             where: {
                 id,
@@ -71,6 +71,11 @@ export class StudioService {
         if (!studio) throw new BadRequestException();
 
         try {
+            if (photo) {
+                fs.unlinkSync(
+                    path.join(storageDir(), 'studios-photos', studio.image)
+                );
+            }
             return this.prisma.studio.update({
                 where: {
                     id
