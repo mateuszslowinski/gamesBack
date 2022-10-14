@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsOptional, IsString, Length} from "class-validator";
+import {IsArray, IsNotEmpty, IsOptional, IsString, Length} from "class-validator";
 
 export class CreateGameDto {
     @IsString()
@@ -17,8 +17,11 @@ export class CreateGameDto {
 
     @IsString()
     @Length(0, 1000)
-    @IsOptional()
+    @IsNotEmpty()
     description: string
+
+    @IsArray()
+    platformId: string[];
 
     image: string
 }
