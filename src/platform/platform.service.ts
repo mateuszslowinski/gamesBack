@@ -1,7 +1,7 @@
 import {ForbiddenException, Injectable} from '@nestjs/common';
 import {CreatePlatformDto} from './dto/create-platform.dto';
 import {PrismaService} from "../prisma/prisma.service";
-import {PlatformType} from "../types";
+import {GameType, PlatformType} from "../types";
 import {UpdatePlatformDto} from "./dto/update-platform.dto";
 
 @Injectable()
@@ -17,19 +17,32 @@ export class PlatformService {
     }
 
     async findAllPlatforms(): Promise<PlatformType[]> {
-        return this.prisma.platform.findMany();
+        return await this.prisma.platform.findMany();
     }
 
     async findPlatformById(id: string): Promise<PlatformType> {
-        return this.prisma.platform.findUnique({
+        return await this.prisma.platform.findUnique({
             where: {
                 id,
             },
         });
     }
+
+    async findGamesOnPlatformByPlatformId(id: string):Promise<GameType[]> {
+        return await this.prisma.game.findMany({
+            where: {
+                platforms: {
+                    some: {
+                        platformId: id
+                    }
+                }
+            }
+        })
+    }
+
     async updatePlatformById(id: string, dto: UpdatePlatformDto): Promise<PlatformType> {
         try {
-            return this.prisma.platform.update({
+            return await this.prisma.platform.update({
                 where: {
                     id
                 }, data: {
@@ -37,11 +50,12 @@ export class PlatformService {
                 },
             })
         } catch (e) {
-            throw e;        }
+            throw e;
+        }
     }
 
     async removePlatform(id: string): Promise<{ message: string }> {
-        const platform = this.prisma.platform.findUnique({
+        const platform = await this.prisma.platform.findUnique({
             where: {
                 id,
             }

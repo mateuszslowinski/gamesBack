@@ -21,6 +21,10 @@ export class PlatformController {
   findAllPlatforms() {
     return this.platformService.findAllPlatforms();
   }
+  @Get(':id/games')
+  findGamesOnPlatformByPlatformId(@Param('id') id: string,){
+    return this.platformService.findGamesOnPlatformByPlatformId(id)
+  }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
