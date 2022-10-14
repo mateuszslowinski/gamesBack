@@ -15,13 +15,11 @@ export class GameService {
 
     async createGame(
         dto: CreateGameDto,
-        files: MulterDiskUploadedFiles,): Promise<GameType> {
-
+        files: MulterDiskUploadedFiles,) {
         const photo = files?.image?.[0] ?? null;
         if (!photo) throw new BadRequestException();
-
         try {
-            return await this.prisma.game.create({
+            return  await this.prisma.game.create({
                 data: {
                     name: dto.name,
                     description: dto.description,
@@ -30,8 +28,13 @@ export class GameService {
                     develeopers: {
                         connect: {id: dto.developerId}
                     },
+                    platforms: {
+                        create: dto.platformId.map(id => ({
+                            platformId: id
+                        }))
+                    }
                 },
-            });
+            })
         } catch (e) {
             try {
                 if (photo) {
