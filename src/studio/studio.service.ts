@@ -58,12 +58,12 @@ export class StudioService {
         });
     }
 
-    async updateStudioById(id: string,
+    async updateStudioByName(name: string,
                            dto: UpdateStudioDto,
                            files: MulterDiskUploadedFiles) {
         const studio = await this.prisma.studio.findUnique({
             where: {
-                id,
+                name,
             },
         });
         const photo = files?.image?.[0] ?? null;
@@ -78,10 +78,11 @@ export class StudioService {
             }
             return this.prisma.studio.update({
                 where: {
-                    id
+                    name
                 },
                 data: {
                     ...dto,
+                    employees: Number(dto.employees),
                     image: photo.filename
                 },
             });
