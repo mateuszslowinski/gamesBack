@@ -58,6 +58,14 @@ export class StudioService {
         });
     }
 
+    async findStudioById(id: string) {
+        return await this.prisma.studio.findUnique({
+            where: {
+                id,
+            }
+        });
+    }
+
     async updateStudioByName(name: string,
                            dto: UpdateStudioDto,
                            files: MulterDiskUploadedFiles) {

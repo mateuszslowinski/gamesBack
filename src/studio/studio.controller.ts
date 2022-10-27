@@ -52,10 +52,17 @@ export class StudioController {
 
     @Get(':name')
     @HttpCode(HttpStatus.OK)
-    findStudioById(
+    findStudioByName(
         @Param('name') name: string,
     ): Promise<StudioType> {
         return this.studioService.findStudioByName(name);
+    }
+    @Get('id/:id')
+    @HttpCode(HttpStatus.OK)
+    findStudioById(
+        @Param('id') id: string,
+    ): Promise<StudioType> {
+        return this.studioService.findStudioById(id);
     }
 
     @UseGuards(JwtGuard)
