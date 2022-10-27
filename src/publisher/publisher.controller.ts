@@ -30,19 +30,19 @@ export class PublisherController {
     return this.publisherService.findAllPublishers();
   }
 
-  @Get(':id')
-  findOnePublisherById(@Param('id') id: string) {
-    return this.publisherService.findOnePublisherById(id);
+  @Get(':name')
+  findOnePublisherById(@Param('name') name: string) {
+    return this.publisherService.findOnePublisherByName(name);
   }
 
   @UseGuards(JwtGuard)
-  @Patch(':id')
+  @Patch(':name')
   @HttpCode(HttpStatus.OK)
   updatePublisherById(
-      @Param('id') id: string,
+      @Param('name') name: string,
       @Body() dto: UpdatePublisherDto,
   ): Promise<PublisherType> {
-    return this.publisherService.updatePublisherById(id, dto);
+    return this.publisherService.updatePublisherByName(name, dto);
   }
 
   @UseGuards(JwtGuard)
@@ -51,8 +51,8 @@ export class PublisherController {
     return this.publisherService.removePublisherById(id);
   }
 
-  @Get('/:id/studios')
-  getStudioByPublisher(@Param('id') id: string) {
-    return this.publisherService.getStudioByPublisher(id);
+  @Get('/:name/studios')
+  getStudioByPublisher(@Param('name') name: string) {
+    return this.publisherService.getStudioByPublisher(name);
   }
 }

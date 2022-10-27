@@ -4,11 +4,6 @@ import {IsOptional, IsString, Length} from "class-validator";
 
 export class UpdateGameDto extends PartialType(CreateGameDto) {
     @IsString()
-    @Length(1, 100)
-    @IsOptional()
-    name: string;
-
-    @IsString()
     @Length(1, 36)
     @IsOptional()
     developerId: string

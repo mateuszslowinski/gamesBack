@@ -50,20 +50,28 @@ export class StudioService {
         return await this.prisma.studio.findMany();
     }
 
-    async findStudioById(id: string) {
+    async findStudioByName(name: string) {
         return await this.prisma.studio.findUnique({
             where: {
-                id
+               name
             }
         });
     }
 
-    async updateStudioById(id: string,
+    async findStudioById(id: string) {
+        return await this.prisma.studio.findUnique({
+            where: {
+                id,
+            }
+        });
+    }
+
+    async updateStudioByName(name: string,
                            dto: UpdateStudioDto,
                            files: MulterDiskUploadedFiles) {
         const studio = await this.prisma.studio.findUnique({
             where: {
-                id,
+                name,
             },
         });
         const photo = files?.image?.[0] ?? null;
@@ -78,10 +86,11 @@ export class StudioService {
             }
             return this.prisma.studio.update({
                 where: {
-                    id
+                    name
                 },
                 data: {
                     ...dto,
+                    employees: Number(dto.employees),
                     image: photo.filename
                 },
             });

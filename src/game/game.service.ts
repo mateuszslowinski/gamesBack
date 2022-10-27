@@ -19,7 +19,7 @@ export class GameService {
         const photo = files?.image?.[0] ?? null;
         if (!photo) throw new BadRequestException();
         try {
-            return  await this.prisma.game.create({
+            return await this.prisma.game.create({
                 data: {
                     name: dto.name,
                     description: dto.description,
@@ -52,22 +52,22 @@ export class GameService {
         return await this.prisma.game.findMany();
     }
 
-    async findGameById(id: string): Promise<GameType> {
+    async findGameByName(name: string): Promise<GameType> {
         return await this.prisma.game.findUnique({
             where: {
-                id,
+                name,
             },
         });
     }
 
-    async updateGameById(
-        id: string,
+    async updateGameByName(
+        name: string,
         dto: UpdateGameDto,
         files: MulterDiskUploadedFiles
     ): Promise<GameType> {
         const game = await this.prisma.game.findUnique({
             where: {
-                id,
+                name,
             },
         });
         const photo = files?.image?.[0] ?? null;
@@ -82,7 +82,7 @@ export class GameService {
             }
             return this.prisma.game.update({
                 where: {
-                    id
+                    name
                 },
                 data: {
                     ...dto,
@@ -148,10 +148,16 @@ export class GameService {
         }
     }
 
-    async getGamesByStudio(id: string): Promise<GameType[]> {
+    async getGamesByStudio(name: string): Promise<GameType[]> {
+        const studio = await this.prisma.studio.findUnique({
+            where: {
+                name
+            }
+        })
+
         return await this.prisma.game.findMany({
             where: {
-                developerId: id,
+                developerId: studio.id,
             },
         });
     }

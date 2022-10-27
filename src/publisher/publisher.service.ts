@@ -21,19 +21,19 @@ export class PublisherService {
         return this.prisma.publisher.findMany()
     }
 
-    async findOnePublisherById(id: string): Promise<PublisherType> {
+    async findOnePublisherByName(name: string): Promise<PublisherType> {
         return await this.prisma.publisher.findUnique({
             where: {
-                id
+               name
             }
         });
     }
 
-    async updatePublisherById(id: string, dto: UpdatePublisherDto): Promise<PublisherType> {
+    async updatePublisherByName(name: string, dto: UpdatePublisherDto): Promise<PublisherType> {
         try {
             return this.prisma.publisher.update({
                 where: {
-                    id
+                    name
                 }, data: {
                     ...dto,
                 },
@@ -60,10 +60,15 @@ export class PublisherService {
         return {message: "Wydawca została usunięta"}
     }
 
-    async getStudioByPublisher(id: string): Promise<StudioType[]> {
+    async getStudioByPublisher(name: string): Promise<StudioType[]> {
+        const publisher= await this.prisma.publisher.findUnique({
+            where: {
+                name
+            }
+        });
         return await this.prisma.studio.findMany({
             where: {
-                ownerId: id
+                ownerId: publisher.id
             }
         })
     }

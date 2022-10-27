@@ -42,25 +42,25 @@ export class GameController {
     return this.gameService.findAllGames();
   }
 
-  @Get(':id')
+  @Get(':name')
   @HttpCode(HttpStatus.OK)
-  findGameById(@Param('id') id: string) {
-    return this.gameService.findGameById(id);
+  findGameByName(@Param('name') name: string) {
+    return this.gameService.findGameByName(name);
   }
 
   @UseGuards(JwtGuard)
-  @Patch(':id')
+  @Patch(':name')
   @UseInterceptors(
       FileFieldsInterceptor([{name: 'image', maxCount: 1},],
           {storage: multerStorage(path.join(storageDir(), 'games-photos'))},
       )
   )
   @HttpCode(HttpStatus.OK)
-  updateGameById(
-      @Param('id') id: string,
+  updateGameByName(
+      @Param('name') name: string,
       @Body() dto: UpdateGameDto,
       @UploadedFiles() files: MulterDiskUploadedFiles) {
-    return this.gameService.updateGameById(id, dto,files);
+    return this.gameService.updateGameByName(name, dto,files);
   }
 
   @UseGuards(JwtGuard)
@@ -79,8 +79,8 @@ export class GameController {
     return this.gameService.getGamePhoto(id, res);
   }
 
-  @Get('/:id/studio')
-  getGamesByStudio(@Param('id') id: string) {
-    return this.gameService.getGamesByStudio(id);
+  @Get('/:name/studio')
+  getGamesByStudio(@Param('name') name: string) {
+    return this.gameService.getGamesByStudio(name);
   }
 }

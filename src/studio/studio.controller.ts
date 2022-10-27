@@ -50,7 +50,14 @@ export class StudioController {
         return this.studioService.findAllStudios();
     }
 
-    @Get(':id')
+    @Get(':name')
+    @HttpCode(HttpStatus.OK)
+    findStudioByName(
+        @Param('name') name: string,
+    ): Promise<StudioType> {
+        return this.studioService.findStudioByName(name);
+    }
+    @Get('id/:id')
     @HttpCode(HttpStatus.OK)
     findStudioById(
         @Param('id') id: string,
@@ -59,19 +66,19 @@ export class StudioController {
     }
 
     @UseGuards(JwtGuard)
-    @Patch(':id')
+    @Patch(':name')
     @UseInterceptors(
         FileFieldsInterceptor([{name: 'image', maxCount: 1},],
             {storage: multerStorage(path.join(storageDir(), 'studios-photos'))},
         )
     )
     @HttpCode(HttpStatus.OK)
-    updateStudioById(
-        @Param('id') id: string,
+    updateStudioByName(
+        @Param('name') name: string,
         @Body() dto: UpdateStudioDto,
         @UploadedFiles() files: MulterDiskUploadedFiles
     ): Promise<StudioType> {
-        return this.studioService.updateStudioById(id, dto, files);
+        return this.studioService.updateStudioByName(name, dto, files);
     }
 
     @UseGuards(JwtGuard)

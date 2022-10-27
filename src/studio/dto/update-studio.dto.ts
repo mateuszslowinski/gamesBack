@@ -4,11 +4,6 @@ import {IsNumber, IsOptional, IsString, Length} from "class-validator";
 
 export class UpdateStudioDto extends PartialType(CreateStudioDto) {
     @IsString()
-    @Length(1, 100)
-    @IsOptional()
-    name: string;
-
-    @IsString()
     @Length(1, 50)
     @IsOptional()
     country: string
@@ -33,5 +28,4 @@ export class UpdateStudioDto extends PartialType(CreateStudioDto) {
     description:string;
 
     image: string
-
 }
