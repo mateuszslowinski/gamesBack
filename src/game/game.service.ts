@@ -19,7 +19,7 @@ export class GameService {
         const photo = files?.image?.[0] ?? null;
         if (!photo) throw new BadRequestException();
         try {
-            return  await this.prisma.game.create({
+            return await this.prisma.game.create({
                 data: {
                     name: dto.name,
                     description: dto.description,
@@ -148,10 +148,16 @@ export class GameService {
         }
     }
 
-    async getGamesByStudio(id: string): Promise<GameType[]> {
+    async getGamesByStudio(name: string): Promise<GameType[]> {
+        const studio = await this.prisma.studio.findUnique({
+            where: {
+                name
+            }
+        })
+
         return await this.prisma.game.findMany({
             where: {
-                developerId: id,
+                developerId: studio.id,
             },
         });
     }
