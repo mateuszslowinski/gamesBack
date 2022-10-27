@@ -60,14 +60,14 @@ export class GameService {
         });
     }
 
-    async updateGameById(
-        id: string,
+    async updateGameByName(
+        name: string,
         dto: UpdateGameDto,
         files: MulterDiskUploadedFiles
     ): Promise<GameType> {
         const game = await this.prisma.game.findUnique({
             where: {
-                id,
+                name,
             },
         });
         const photo = files?.image?.[0] ?? null;
@@ -82,7 +82,7 @@ export class GameService {
             }
             return this.prisma.game.update({
                 where: {
-                    id
+                    name
                 },
                 data: {
                     ...dto,

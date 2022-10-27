@@ -49,18 +49,18 @@ export class GameController {
   }
 
   @UseGuards(JwtGuard)
-  @Patch(':id')
+  @Patch(':name')
   @UseInterceptors(
       FileFieldsInterceptor([{name: 'image', maxCount: 1},],
           {storage: multerStorage(path.join(storageDir(), 'games-photos'))},
       )
   )
   @HttpCode(HttpStatus.OK)
-  updateGameById(
-      @Param('id') id: string,
+  updateGameByName(
+      @Param('name') name: string,
       @Body() dto: UpdateGameDto,
       @UploadedFiles() files: MulterDiskUploadedFiles) {
-    return this.gameService.updateGameById(id, dto,files);
+    return this.gameService.updateGameByName(name, dto,files);
   }
 
   @UseGuards(JwtGuard)
