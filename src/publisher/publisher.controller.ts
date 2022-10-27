@@ -51,8 +51,8 @@ export class PublisherController {
     return this.publisherService.removePublisherById(id);
   }
 
-  @Get('/:id/studios')
-  getStudioByPublisher(@Param('id') id: string) {
-    return this.publisherService.getStudioByPublisher(id);
+  @Get('/:name/studios')
+  getStudioByPublisher(@Param('name') name: string) {
+    return this.publisherService.getStudioByPublisher(name);
   }
 }

@@ -60,10 +60,15 @@ export class PublisherService {
         return {message: "Wydawca została usunięta"}
     }
 
-    async getStudioByPublisher(id: string): Promise<StudioType[]> {
+    async getStudioByPublisher(name: string): Promise<StudioType[]> {
+        const publisher= await this.prisma.publisher.findUnique({
+            where: {
+                name
+            }
+        });
         return await this.prisma.studio.findMany({
             where: {
-                ownerId: id
+                ownerId: publisher.id
             }
         })
     }
