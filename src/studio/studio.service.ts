@@ -50,10 +50,10 @@ export class StudioService {
         return await this.prisma.studio.findMany();
     }
 
-    async findStudioById(id: string) {
+    async findStudioByName(name: string) {
         return await this.prisma.studio.findUnique({
             where: {
-                id
+               name
             }
         });
     }
