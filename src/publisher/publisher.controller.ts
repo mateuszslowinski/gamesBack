@@ -30,9 +30,9 @@ export class PublisherController {
     return this.publisherService.findAllPublishers();
   }
 
-  @Get(':id')
-  findOnePublisherById(@Param('id') id: string) {
-    return this.publisherService.findOnePublisherById(id);
+  @Get(':name')
+  findOnePublisherById(@Param('name') name: string) {
+    return this.publisherService.findOnePublisherByName(name);
   }
 
   @UseGuards(JwtGuard)

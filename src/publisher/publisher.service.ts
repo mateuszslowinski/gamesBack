@@ -21,10 +21,10 @@ export class PublisherService {
         return this.prisma.publisher.findMany()
     }
 
-    async findOnePublisherById(id: string): Promise<PublisherType> {
+    async findOnePublisherByName(name: string): Promise<PublisherType> {
         return await this.prisma.publisher.findUnique({
             where: {
-                id
+               name
             }
         });
     }
