@@ -29,11 +29,11 @@ export class PublisherService {
         });
     }
 
-    async updatePublisherById(id: string, dto: UpdatePublisherDto): Promise<PublisherType> {
+    async updatePublisherByName(name: string, dto: UpdatePublisherDto): Promise<PublisherType> {
         try {
             return this.prisma.publisher.update({
                 where: {
-                    id
+                    name
                 }, data: {
                     ...dto,
                 },

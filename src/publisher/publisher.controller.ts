@@ -36,13 +36,13 @@ export class PublisherController {
   }
 
   @UseGuards(JwtGuard)
-  @Patch(':id')
+  @Patch(':name')
   @HttpCode(HttpStatus.OK)
   updatePublisherById(
-      @Param('id') id: string,
+      @Param('name') name: string,
       @Body() dto: UpdatePublisherDto,
   ): Promise<PublisherType> {
-    return this.publisherService.updatePublisherById(id, dto);
+    return this.publisherService.updatePublisherByName(name, dto);
   }
 
   @UseGuards(JwtGuard)
