@@ -42,10 +42,10 @@ export class GameController {
     return this.gameService.findAllGames();
   }
 
-  @Get(':id')
+  @Get(':name')
   @HttpCode(HttpStatus.OK)
-  findGameById(@Param('id') id: string) {
-    return this.gameService.findGameById(id);
+  findGameByName(@Param('name') name: string) {
+    return this.gameService.findGameByName(name);
   }
 
   @UseGuards(JwtGuard)

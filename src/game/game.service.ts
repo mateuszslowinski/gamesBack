@@ -52,10 +52,10 @@ export class GameService {
         return await this.prisma.game.findMany();
     }
 
-    async findGameById(id: string): Promise<GameType> {
+    async findGameByName(name: string): Promise<GameType> {
         return await this.prisma.game.findUnique({
             where: {
-                id,
+                name,
             },
         });
     }
