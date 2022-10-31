@@ -36,7 +36,10 @@ export class PlatformService {
                         platformId: id
                     }
                 }
-            }
+            },
+            orderBy: {
+                releaseDate:'asc'
+            },
         })
     }
 
