@@ -60,6 +60,19 @@ export class GameService {
         });
     }
 
+    async findClosestReleaseGame(): Promise<GameType> {
+        return await this.prisma.game.findFirst({
+            orderBy: {
+                releaseDate:'asc'
+            },
+            where: {
+                releaseDate: {
+                    gte: new Date(),
+                },
+            },
+        });
+    }
+
     async updateGameByName(
         name: string,
         dto: UpdateGameDto,
