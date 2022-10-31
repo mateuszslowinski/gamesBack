@@ -63,7 +63,7 @@ export class GameService {
     async findClosestReleaseGame(): Promise<GameType> {
         return await this.prisma.game.findFirst({
             orderBy: {
-                releaseDate:'asc'
+                releaseDate: 'asc'
             },
             where: {
                 releaseDate: {
@@ -173,5 +173,16 @@ export class GameService {
                 developerId: studio.id,
             },
         });
+    }
+
+    async getGamesBySearch(term: string): Promise<GameType[] | null> {
+        return await this.prisma.game.findMany({
+            where: {
+                name: {
+                    contains: term,
+                    },
+                }
+            }
+        );
     }
 }
