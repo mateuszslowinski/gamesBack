@@ -88,9 +88,14 @@ export class GameController {
     }
 
     @Get('/:name/studio')
+    @HttpCode(HttpStatus.OK)
     getGamesByStudio(@Param('name') name: string) {
         return this.gameService.getGamesByStudio(name);
     }
 
-
+    @Get('/:term/search')
+    @HttpCode(HttpStatus.OK)
+    getGamesBySearch(@Param('term') term:string ) {
+        return this.gameService.getGamesBySearch(term);
+    }
 }
