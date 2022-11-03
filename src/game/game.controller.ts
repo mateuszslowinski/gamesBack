@@ -93,7 +93,7 @@ export class GameController {
         return this.gameService.getGamesByStudio(name);
     }
 
-    @Get('/:term/search')
+    @Get('/search/:term')
     @HttpCode(HttpStatus.OK)
     getGamesBySearch(@Param('term') term:string ) {
         return this.gameService.getGamesBySearch(term);
