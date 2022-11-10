@@ -10,21 +10,18 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      disableErrorMessages: true,
-
-      whitelist: true,
-      forbidNonWhitelisted: true,
-
-      transform: true,
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  );
-
-  await app.listen(process.env.PORT || 8080);
+    app.useGlobalPipes(
+        new ValidationPipe({
+            disableErrorMessages: true,
+            whitelist: true,
+            forbidNonWhitelisted: true,
+            transform: true,
+            transformOptions: {
+                enableImplicitConversion: true,
+            },
+        }),
+    );
+    await app.listen(3001);
 
   bootstrap();
 }
