@@ -11,7 +11,7 @@ The goal is learned NestJS and Prisma technology and extended coding skills.
 - Bcrypt
 - Multer
 
-###Project is a backend api for this repo
+### Project is a backend api for this repo
     https://github.com/mateuszslowinski/gamesFront
 
 ## Setup
